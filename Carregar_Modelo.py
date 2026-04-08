@@ -1,9 +1,9 @@
 import torch
-import Main as M
+import Checar_Tamanho as CHK
 
 # Carrega o modelo
 
-caminho = M.Path # ainda não foi adicionado no arquivo Main uma forma de carregar.
+local = CHK.caminho
 
 #Usa o modelo torchscript para carregar
-modelo = torch.load(caminho, map_location="cpu")
+modelo = torch.load(local, map_location="cpu")
