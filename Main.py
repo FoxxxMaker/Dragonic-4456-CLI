@@ -15,16 +15,13 @@ def carregar_modelo():
     
     # Verifica se o caminho existe
     if os.path.exists(path):
-        checar_tamanho()
+        return path
     else:
         print("caminho inválido, tente novamente.")
-        carregar_modelo
-    return path # retorna o caminho do modelo para a função checar_tamanho
+        return carregar_modelo() # retorna o caminho do modelo para a função checar_tamanho
 
    
-def checar_tamanho():
-    path = carregar_modelo() # chama a função carregar_modelo para obter o caminho do modelo
-
+def checar_tamanho(path):
     if CHK.checar_tamanho(path):
         print("Modelo pronto.")
     else:
@@ -77,4 +74,5 @@ print("\nSistema pronto!")
 enter = input("Pressione ENTER para começar")
 
 if enter == "":
-    carregar_modelo()
+    path = carregar_modelo()
+    checar_tamanho(path)
