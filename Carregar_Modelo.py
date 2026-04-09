@@ -8,4 +8,3 @@ def carregar_modelo(caminho):
         verbose=False # desativa mensagens de log detalhadas
     )
     return llm
-
