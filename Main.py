@@ -11,19 +11,24 @@ def carregar_modelo():
     Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
     
     # Carrega o arquivo do modelo
-    nome_digitado = input("Digite o nome do modelo que deseja carregar: ") # pede para o usuário digitar o nome do modelo que deseja carregar
-    path = os.path.join("Models", nome_digitado) # Compara o nome do modelo tipo inner Join do SQL.
+    # pede para o usuário digitar o nome do modelo que deseja carregar
+    nome_digitado = input("Digite o nome do modelo que deseja carregar: ") 
+    # Compara o nome do modelo tipo inner Join do SQL.
+    path = os.path.join("Models", nome_digitado) 
     
     # Verifica se o caminho existe
     if os.path.exists(path):
         return path
     else:
         print("caminho inválido, tente novamente.")
-        return carregar_modelo() # retorna o caminho do modelo para a função checar_tamanho
+        # retorna o caminho do modelo para a função checar_tamanho
+        return carregar_modelo()
 
    
 def checar_tamanho(path):
-    return CHK.checar_tamanho(path) # chama a função checar_tamanho do arquivo Checar_Tamanho.py e retorna o resultado para a função carregar_modelo
+    # chama a função checar_tamanho do arquivo Checar_Tamanho.py,
+    # e retorna o resultado para a função carregar_modelo
+    return CHK.checar_tamanho(path) 
 
 
 def Mostrar_Modelos():
