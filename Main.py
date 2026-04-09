@@ -6,16 +6,31 @@ from colorama import init, Fore, Style
 import Carregar_Modelo as CM
 import Checar_Tamanho as CHK
 
+
 def carregar_modelo():
+    Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
+    
+    # Carrega o arquivo do modelo
     path = input("Digite o caminho do modelo que deseja carregar: ")
     
+    # Verifica se o caminho existe
+    if os.path.exists(path):
+        checar_tamanho()
+    else:
+        print("caminho inválido, tente novamente.")
+        carregar_modelo
+    return path # retorna o caminho do modelo para a função checar_tamanho
+
+   
 def checar_tamanho():
-    if CHK.checar_tamanho(carregar_modelo.path):
-        modelo = CM.carregar_modelo(carregar_modelo.path)
+    path = carregar_modelo() # chama a função carregar_modelo para obter o caminho do modelo
+
+    if CHK.checar_tamanho(path):
         print("Modelo pronto.")
     else:
         print("Modelo grande demais. Tente um menor que 900Mb.")
-        
+
+
 def Mostrar_Modelos():
     pasta = "Models"
     arquivos = os.listdir(pasta)
@@ -62,4 +77,4 @@ print("\nSistema pronto!")
 enter = input("Pressione ENTER para começar")
 
 if enter == "":
-    Mostrar_Modelos()
+    carregar_modelo()
