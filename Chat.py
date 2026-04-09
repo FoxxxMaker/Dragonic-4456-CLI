@@ -1,5 +1,3 @@
-import Carregar_Modelo as CM
-
 def chat(modelo):
     while True:
         pergunta = input("Você: ") # solicita ao usuário que digite uma pergunta
