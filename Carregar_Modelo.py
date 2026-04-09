@@ -1,4 +1,4 @@
-from llama_cpp import Llama # Chama é uma biblioteca de código aberto para trabalhar com modelos de linguagem, como o LLaMA da Meta. A classe Llama é usada para carregar e interagir com esses modelos.
+from llama_cpp import Llama 
 
 # Função que carrega o modelo
 def carregar_modelo(caminho):
