@@ -1,4 +1,4 @@
-# Dragonic 4456 Console V0.1
+# 🐉Dragonic 4456 Console V0.1
 
 Dragonic 4456 é um sistema protótipo de chat local em Python para carregamento de modelos `.gguf` e interação via terminal.
 O projeto foi desenvolvido com foco em simplicidade, organização modular e evolução gradual. Nesta primeira versão, o sistema lista os modelos disponíveis, 
