@@ -4,7 +4,11 @@ from llama_cpp import Llama
 def carregar_modelo(caminho):
     llm = Llama(
         model_path=caminho,
-        n_ctx=600, # contexto de 600 tokens 
-        verbose=False # desativa mensagens de log detalhadas
+        
+        # contexto de 600 tokens
+        n_ctx=600,  
+        
+        # desativa mensagens de log detalhadas   
+        verbose=False 
     )
     return llm
