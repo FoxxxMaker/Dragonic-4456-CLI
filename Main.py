@@ -5,6 +5,7 @@ import sys
 from colorama import init, Fore, Style
 import Carregar_Modelo as CM
 import Checar_Tamanho as CHK
+import Chat as CH
 
 
 def carregar_modelo():
@@ -23,10 +24,7 @@ def carregar_modelo():
 
    
 def checar_tamanho(path):
-    if CHK.checar_tamanho(path):
-        print("Modelo pronto.")
-    else:
-        print("Modelo grande demais. Tente um menor que 900Mb.")
+    return CHK.checar_tamanho(path) # chama a função checar_tamanho do arquivo Checar_Tamanho.py e retorna o resultado para a função carregar_modelo
 
 
 def Mostrar_Modelos():
@@ -76,4 +74,12 @@ enter = input("Pressione ENTER para começar")
 
 if enter == "":
     path = carregar_modelo()
-    checar_tamanho(path)
+    
+    if checar_tamanho(path):
+        modelo = CM.carregar_modelo(path)
+        CH.chat(modelo)
+    else:
+        print("O modelo é muito grande para ser carregado. Por favor, escolha um modelo menor que 900mb.")
+        sys.exit()
+    
+    
