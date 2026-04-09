@@ -1,9 +1,8 @@
 import os
-import Main as M
 import time
 
 
-caminho = M.Path  # ainda não foi adicionado no arquivo Main uma forma de carregar.
+caminho = Path  # ainda não foi adicionado no arquivo Main uma forma de carregar.
 
 tamanho = os.stat(caminho).st_size
 

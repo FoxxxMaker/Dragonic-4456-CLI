@@ -3,6 +3,25 @@ import rich
 import time
 import sys
 from colorama import init, Fore, Style
+import Carregar_Modelo as CM
+import Checar_Tamanho as CHK
+
+def carregar_modelo():
+    path = input("Digite o caminho do modelo que deseja carregar: ")
+    
+def checar_tamanho():
+    if CHK.checar_tamanho(carregar_modelo.path):
+        modelo = CM.carregar_modelo(carregar_modelo.path)
+        print("Modelo pronto.")
+    else:
+        print("Modelo grande demais. Tente um menor que 900Mb.")
+        
+def Mostrar_Modelos():
+    pasta = "Models"
+    arquivos = os.listdir(pasta)
+    print("Modelos disponíveis:")
+    for arquivo in arquivos:
+        print(f"- {arquivo}")
 
 # Logotipo em forma de dragão
 
@@ -23,11 +42,8 @@ print(Style.RESET_ALL)
 print("=" * 30)
 print("Dragonic 4456 Console V0.1")
 
-
+#Começo do Menu principal
 print(" ")
-
-
-
 
 print("Olá! Bem vindo ao Dragonic 4456!")
 print("Por favor, aguarde")
@@ -43,4 +59,7 @@ for i in range(21):
 
 print("\nSistema pronto!")
 
+enter = input("Pressione ENTER para começar")
 
+if enter == "":
+    Mostrar_Modelos()
