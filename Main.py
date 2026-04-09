@@ -11,7 +11,8 @@ def carregar_modelo():
     Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
     
     # Carrega o arquivo do modelo
-    path = input("Digite o caminho do modelo que deseja carregar: ")
+    nome_digitado = input("Digite o nome do modelo que deseja carregar: ") # pede para o usuário digitar o nome do modelo que deseja carregar
+    path = os.path.join("Models", nome_digitado) # Compara o nome do modelo tipo inner Join do SQL.
     
     # Verifica se o caminho existe
     if os.path.exists(path):

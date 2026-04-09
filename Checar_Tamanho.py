@@ -13,4 +13,3 @@ def checar_tamanho(caminho):
         return True
     else:
         return False
-
