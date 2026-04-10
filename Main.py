@@ -6,6 +6,7 @@ import Carregar_Modelo as CM
 import Checar_Tamanho as CHK
 import Chat as CH
 
+#Versão 0.1  
 
 def carregar_modelo():
     Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
