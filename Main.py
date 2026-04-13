@@ -6,14 +6,15 @@ import Carregar_Modelo as CM
 import Checar_Tamanho as CHK
 import Chat as CH
 
-#Versão 0.1  
+#Versão 0.2
 
 def carregar_modelo():
     Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
     
     # Carrega o arquivo do modelo
     # pede para o usuário digitar o nome do modelo que deseja carregar
-    nome_digitado = input("Digite o nome do modelo que deseja carregar: ") 
+    nome_digitado = input("Digite o nome do modelo que deseja carregar:") 
+  
     # Compara o nome do modelo tipo inner Join do SQL.
     path = os.path.join("Models", nome_digitado) 
     
@@ -66,6 +67,7 @@ print("Por favor, aguarde")
 
 print(" ")
 
+
 for i in range(21):
     barra = "#" * i + " " * (20 - i)
     porcentagem = i * 5
@@ -73,9 +75,10 @@ for i in range(21):
     sys.stdout.flush()
     time.sleep(0.15)
 
+
 print("\nSistema pronto!")
 
-enter = input("Pressione ENTER para começar")
+enter = input("Pressione ENTER para começar ou qualquer coisa para sair")
 
 if enter == "":
     path = carregar_modelo()
@@ -84,7 +87,5 @@ if enter == "":
         modelo = CM.carregar_modelo(path)
         CH.chat(modelo)
     else:
-        print("O modelo é muito grande para ser carregado. Por favor, escolha um modelo menor que 900mb.")
+        print("saindo....")
         sys.exit()
-    
-    
