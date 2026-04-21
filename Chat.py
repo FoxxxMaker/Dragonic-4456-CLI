@@ -2,6 +2,10 @@ def chat(modelo):
     while True:
         # solicita ao usuário que digite uma pergunta
         pergunta = input("Você: ") 
+        if pergunta.lower() in  ["sair", "exit", "quit"]:
+            print("Encerrando o chat. Até mais!")
+            break
+
         # gera uma resposta usando o modelo carregado
         resposta = modelo(
             prompt = f"""System: Você é uma assistente útil, educada e inteligente.
