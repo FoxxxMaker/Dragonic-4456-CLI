@@ -3,6 +3,19 @@ def chat(modelo):
         # solicita ao usuário que digite uma pergunta
         pergunta = input("Você: ") 
         # gera uma resposta usando o modelo carregado
-        resposta = modelo(pergunta) 
+        resposta = modelo(
+            prompt = f"""System: Você é uma assistente útil, educada e inteligente.
+            esponda em português de forma natural.
+            Não repita frases desnecessariamente.
+            Não gere símbolos aleatórios.
+            Seja clara e amigável.
+
+            Usuário: {pergunta}
+            Assistente:""",
+            max_tokens=80,
+            temperature=0.2,
+            stop=["Usuário:", "\n\n"],
+            echo=False
+        ) 
         # exibe a resposta gerada pelo modelo
         print("Model:", resposta["choices"][0]["text"].strip()) 

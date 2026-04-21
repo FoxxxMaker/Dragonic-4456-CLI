@@ -6,7 +6,7 @@ import Checar_Tamanho as CHK
 import Chat as CH
 from pathlib import Path
 
-#Versão 0.2
+#Versão 0.3
 
 def carregar_modelo():
     Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
@@ -39,7 +39,7 @@ def Mostrar_Modelos():
 
     print("Modelos disponíveis:")
     for arquivo in pasta.iterdir():
-        print(f"- {arquivo}")
+        print(f"- {arquivo.name}")
 
 # Logotipo em forma de dragão
 
