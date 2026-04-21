@@ -5,21 +5,21 @@ from colorama import init, Fore, Style
 import Carregar_Modelo as CM
 import Checar_Tamanho as CHK
 import Chat as CH
+from pathlib import Path
 
 #Versão 0.2
 
 def carregar_modelo():
     Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
-    
     # Carrega o arquivo do modelo
     # pede para o usuário digitar o nome do modelo que deseja carregar
     nome_digitado = input("Digite o nome do modelo que deseja carregar:") 
   
     # Compara o nome do modelo tipo inner Join do SQL.
-    path = os.path.join("Models", nome_digitado) 
+    path = Path('Models') / nome_digitado
     
     # Verifica se o caminho existe
-    if os.path.exists(path):
+    if path.exists():
         return path
     else:
         print("caminho inválido, tente novamente.")
@@ -34,10 +34,12 @@ def checar_tamanho(path):
 
 
 def Mostrar_Modelos():
-    pasta = "Models"
-    arquivos = os.listdir(pasta)
+    # Define o caminho da pasta para PathLib
+    pasta = Path('Models')
+    
+
     print("Modelos disponíveis:")
-    for arquivo in arquivos:
+    for arquivo in pasta.iterdir():
         print(f"- {arquivo}")
 
 # Logotipo em forma de dragão
