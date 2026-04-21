@@ -1,4 +1,3 @@
-import os
 import time
 import sys
 from colorama import init, Fore, Style
