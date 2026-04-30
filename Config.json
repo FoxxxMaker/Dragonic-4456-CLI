@@ -1,0 +1,7 @@
+{
+    "system_prompt": "System: Você é uma assistente útil, educada e inteligente. Responda em português de forma natural. Não repita frases desnecessariamente. Não gere símbolos aleatórios. Seja clara e amigável.",
+    "max_tokens": 80,
+    "temperature": 0.2,
+    "stop": ["Usuário:", "\n\n"],
+    "echo": false
+}

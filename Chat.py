@@ -1,3 +1,8 @@
+import json
+    
+with open("Config.json", "r") as f:
+    config = json.load(f)
+
 def chat(modelo):
     while True:
         # solicita ao usuário que digite uma pergunta
@@ -6,20 +11,13 @@ def chat(modelo):
             print("Encerrando o chat. Até mais!")
             break
 
-        # gera uma resposta usando o modelo carregado
+        # gera uma resposta usando o modelo carregado e as configurações do arquivo JSON
         resposta = modelo(
-            prompt = f"""System: Você é uma assistente útil, educada e inteligente.
-            esponda em português de forma natural.
-            Não repita frases desnecessariamente.
-            Não gere símbolos aleatórios.
-            Seja clara e amigável.
-
-            Usuário: {pergunta}
-            Assistente:""",
-            max_tokens=80,
-            temperature=0.2,
-            stop=["Usuário:", "\n\n"],
-            echo=False
+            prompt=config["system_prompt"] + "\n\n" + "Usuário: " + pergunta + "\n\n",
+            max_tokens=config["max_tokens"],
+            temperature=config["temperature"],
+            stop=config["stop"],
+            echo=config["echo"]
         ) 
         # exibe a resposta gerada pelo modelo
         print("Model:", resposta["choices"][0]["text"].strip()) 
