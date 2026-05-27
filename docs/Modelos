@@ -1,0 +1,14 @@
+## Pasta modelos
+
+O Dragonic trabalha somente com modelos .GGUF. 
+
+Por enquanton enquanto está em fase de testes, só é aceito modelos de até 900MB, geralmente de 160M até 500M de parâmetros.
+
+## Coloque os modelos na pasta
+
+```txt
+Models/
+
+## Após isso, inicie o software
+
+Assim que iniciar, você poderá usar, copiando o nome (com o complemento .gguf) e colando no prompt, espere e começe a fluir.
