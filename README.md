@@ -1,4 +1,4 @@
-# 🐉Dragonic 4456 Console V0.1
+# 🐉Dragonic 4456 Console V0.3
 
 Dragonic 4456 é um sistema protótipo de chat local em Python para carregamento de modelos `.gguf` e interação via terminal.
 O projeto foi desenvolvido com foco em simplicidade, organização modular e evolução gradual. Nesta primeira versão, o sistema lista os modelos disponíveis, 
@@ -11,6 +11,13 @@ valida o arquivo escolhido, verifica o tamanho antes do carregamento e inicializ
 - Verificação de tamanho do modelo antes do carregamento
 - Carregamento de modelos `.gguf`
 - Chat básico no terminal com entrada e resposta
+
+## Atualização🧩:
+
+Foi adicionado um arquivo .json chamado Config.json. Nele, você pode editar o prompt de sistema (que é tipo as ordens que você dá à I.A), temperature, que é o temperamento da I.A e outros.
+
+<img width="3574" height="558" alt="config" src="https://github.com/user-attachments/assets/e7ae2065-df97-475c-b280-46094ae8a07f" />
+
 
 ## Estrutura do projeto
 
