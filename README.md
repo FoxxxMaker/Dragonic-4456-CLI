@@ -1,92 +1,84 @@
-# 🐉Dragonic 4456 Console V0.3
+# 🐉 Dragonic 4456 Console — V0.3
 
-Dragonic 4456 é um sistema protótipo de chat local em Python para carregamento de modelos `.gguf` e interação via terminal.
-O projeto foi desenvolvido com foco em simplicidade, organização modular e evolução gradual. Nesta primeira versão, o sistema lista os modelos disponíveis, 
-valida o arquivo escolhido, verifica o tamanho antes do carregamento e inicializa um chat em CLI usando `llama-cpp-python`.
+Dragonic 4456 é um protótipo de chat local em Python. Ele carrega modelos
+`.gguf` da pasta `Models/` e permite conversar com eles pelo terminal usando
+`llama-cpp-python`.
 
-## Funcionalidades atuais
-- Interface simples em terminal
-- Listagem de modelos disponíveis na pasta `Models`
-- Validação do caminho do arquivo escolhido
-- Verificação de tamanho do modelo antes do carregamento
-- Carregamento de modelos `.gguf`
-- Chat básico no terminal com entrada e resposta
+> Esta documentação descreve a V0.3. A V0.4 está em desenvolvimento.
 
-## Atualização🧩:
+## O que a V0.3 oferece
 
-Foi adicionado um arquivo .json chamado Config.json. Nele, você pode editar o prompt de sistema (que é tipo as ordens que você dá à I.A), temperature, que é o temperamento da I.A e outros.
+- Interface de linha de comando com logo e inicialização visual.
+- Listagem de modelos disponíveis em `Models/`.
+- Escolha e verificação do arquivo antes do carregamento.
+- Limite de tamanho para o modelo e animação de carregamento.
+- Chat local pelo terminal.
+- Comandos `sair`, `exit` e `quit` para encerrar o chat.
+- Configuração do comportamento do modelo em `Config.json`.
 
-<img width="3574" height="558" alt="config" src="https://github.com/user-attachments/assets/e7ae2065-df97-475c-b280-46094ae8a07f" />
+## Começando
 
+1. Instale as dependências:
 
-## Estrutura do projeto
+   ```powershell
+   pip install -r requirements.txt
+   ```
 
-```bash
-Dragonic-4456/
+2. Coloque um modelo `.gguf` na pasta `Models/`.
+3. Execute o programa:
+
+   ```powershell
+   python Main.py
+   ```
+
+4. Pressione `ENTER`, digite o nome do modelo listado e comece a conversar.
+
+## Configuração
+
+O arquivo [Config.json](Config.json) reúne as opções usadas no chat:
+
+- `system_prompt`: instruções e personalidade inicial do modelo.
+- `max_tokens`: quantidade máxima de tokens gerados por resposta.
+- `temperature`: grau de variação/criatividade da resposta.
+- `stop`: textos que interrompem a geração.
+- `echo`: define se o prompt também aparece na saída.
+
+Veja uma explicação mais detalhada em [Configuração](docs/Configuração.md).
+
+## Estrutura
+
+```text
+Dragonic-4456-CLI/
 ├── Main.py
+├── Chat.py
 ├── Carregar_Modelo.py
 ├── Checar_Tamanho.py
-├── Chat.py
+├── Config.json
 ├── requirements.txt
-└── Models/
+├── Models/
+└── docs/
 ```
 
-# Como funciona🤔
+## Documentação
 
-O fluxo atual do programa é:
-- Exibir uma tela inicial no terminal
-- Mostrar os modelos disponíveis
-- Permitir que o usuário escolha um modelo
-- Verificar se o arquivo existe
-- Checar se o tamanho do modelo está dentro do limite definido
-- Carregar o modelo .gguf
-- Iniciar o chat no terminal
+- [Instalação](docs/Instalação.md)
+- [Uso](docs/Uso.md)
+- [Modelos GGUF](docs/Modelos)
+- [Configuração](docs/Configuração.md)
+- [Roadmap](docs/roadmap.md)
 
-Como o programa é só um protótipo, é aceito apenas modelos .GGUF menores que 1B que tenham até `900Mb`.
+## Histórico de versões
 
-# Tecnologias utilizadas:⚙
+- [README da V0.1](docs/versoes/README-v0.1.md)
+- [README da V0.2](docs/versoes/README-v0.2.md)
+- [README da V0.3](docs/versoes/README-v0.3.md)
+
+## Tecnologias
+
 - Python
-- llama-cpp-python
-- colorama
+- [llama-cpp-python](https://github.com/abetlen/llama-cpp-python)
+- Colorama
 
-# Requisitos:
+## Licença
 
-Antes de executar o projeto, você precisa ter:
-
-- Python instalado
-- Um ambiente virtual configurado
-- As dependências instaladas
-- Um modelo .gguf (até 900Mb) dentro da pasta Models
-
-## Instalação📌
-
-Clone o repositório:
-```
-git clone https://github.com/FoxxxMaker/Dragonic-4456-CLI.git
-cd CLI
-```
-Crie e ative um ambiente virtual:
-
-# Windows
-```
-python -m venv .venv
-.venv\Scripts\activate
-```
-#Instale as dependências:
-```
-pip install -r requirements.txt
-```
-
-# Como executar
-
-Com o ambiente virtual ativado, rode:
-
-```
-python Main.py
-```
-Depois disso:
-
-pressione ENTER para iniciar
-escolha um modelo listado na pasta Models
-aguarde o carregamento
-converse com o modelo pelo terminal
+Este projeto é distribuído sob a [licença MIT](LICENSE).
