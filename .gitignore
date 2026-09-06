@@ -1,0 +1,20 @@
+# Ambiente virtual python
+venv/
+env/
+
+# Cache do pip
+__pycache__/
+
+# Arquivos de configuração do editor
+.vscode/
+
+# arquivos de log
+*.log
+
+# build e pacotes python
+dist/
+build/
+
+# Modelos locais grandes LLMs
+*.gguf
+*.bin
