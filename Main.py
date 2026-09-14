@@ -9,13 +9,14 @@ from pathlib import Path
 #Versão 0.3
 
 def carregar_modelo():
-    Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
+    modelos = Mostrar_Modelos() # mostra os modelos disponíveis para o usuário escolher
     # Carrega o arquivo do modelo
     # pede para o usuário digitar o nome do modelo que deseja carregar
-    nome_digitado = input("Digite o nome do modelo que deseja carregar:") 
-  
-    # Compara o nome do modelo tipo inner Join do SQL.
-    path = Path('Models') / nome_digitado
+    
+    numero_digitado = input("Digite o numero do modelo que deseja carregar:") 
+
+    indice = int(numero_digitado) - 1 # subtrai 1 do número digitado para obter o índice correto da lista de modelos 
+    path = modelos[indice]
     
     # Verifica se o caminho existe
     if path.exists():
@@ -35,11 +36,14 @@ def checar_tamanho(path):
 def Mostrar_Modelos():
     # Define o caminho da pasta para PathLib
     pasta = Path('Models')
+    modelos = sorted(pasta.glob("*.gguf")) # Lista todos os arquivos com a extensão .gguf na pasta Models
     
-
+    n = 0
     print("Modelos disponíveis:")
-    for arquivo in pasta.iterdir():
-        print(f"- {arquivo.name}")
+    for arquivo, n in enumerate(pasta.iterdir(), start=1):
+        n += 0 
+        print(f"[{n}] - {arquivo.name}")
+    return modelos
 
 # Logotipo em forma de dragão
 
