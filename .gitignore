@@ -1,20 +1,14 @@
-# Ambiente virtual python
+# Ambientes virtuais Python
+.venv/
 venv/
 env/
-
-# Cache do pip
+# Cache e artefatos
 __pycache__/
-
-# Arquivos de configuração do editor
+*.py[cod]
 .vscode/
-
-# arquivos de log
 *.log
-
-# build e pacotes python
 dist/
 build/
-
-# Modelos locais grandes LLMs
+# Modelos locais grandes
 *.gguf
 *.bin
