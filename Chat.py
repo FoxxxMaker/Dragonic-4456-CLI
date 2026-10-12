@@ -11,11 +11,21 @@ with CAMINHO_CONFIGURACAO.open("r", encoding="utf-8") as arquivo:
     config = json.load(arquivo)
 
 
-def chat(modelo, entrada=input, saida=print):
-    """Executa o chat e cria um backup ao encerrar uma sessão com mensagens."""
-    historico_contexto = HISTORICO.criar_historico()
-    historico_backup = HISTORICO.criar_historico()
+def salvar_configuracao():
+    """Persiste as configurações atuais sem depender da pasta do terminal."""
+    caminho_temporario = CAMINHO_CONFIGURACAO.with_suffix(".tmp")
+    with caminho_temporario.open("w", encoding="utf-8") as arquivo:
+        json.dump(config, arquivo, ensure_ascii=False, indent=2)
+        arquivo.write("\n")
+    caminho_temporario.replace(CAMINHO_CONFIGURACAO)
+
+
+def chat(modelo, entrada=input, saida=print, historico_inicial=None, system_prompt=None):
+    """Executa um chat novo ou retomado e salva sua sessão ao encerrar."""
+    historico_backup = list(historico_inicial or [])
     limite_mensagens = config.get("historico_max_mensagens", 10)
+    historico_contexto = historico_backup[-limite_mensagens:] if limite_mensagens > 0 else []
+    system_prompt = system_prompt or config["system_prompt"]
 
     try:
         while True:
@@ -24,11 +34,7 @@ def chat(modelo, entrada=input, saida=print):
                 saida("Encerrando o chat. Até mais!")
                 break
 
-            prompt = HISTORICO.montar_prompt(
-                config["system_prompt"],
-                historico_contexto,
-                pergunta,
-            )
+            prompt = HISTORICO.montar_prompt(system_prompt, historico_contexto, pergunta)
             resposta = modelo(
                 prompt=prompt,
                 max_tokens=config["max_tokens"],
@@ -52,7 +58,7 @@ def chat(modelo, entrada=input, saida=print):
         if config.get("backup_chats_habilitado", True):
             caminho_backup = BACKUP.salvar_backup(
                 historico_backup,
-                config["system_prompt"],
+                system_prompt,
                 config.get("diretorio_backup_chats", "backups_chats"),
             )
             if caminho_backup is not None:

@@ -41,3 +41,20 @@ def salvar_backup(historico, system_prompt, diretorio="backups_chats", momento=N
 
     caminho_temporario.replace(caminho_backup)
     return caminho_backup
+
+
+def listar_backups(diretorio="backups_chats"):
+    """Lista os backups mais recentes primeiro."""
+    pasta_backup = resolver_diretorio_backup(diretorio)
+    if not pasta_backup.exists():
+        return []
+    return sorted(pasta_backup.glob("chat_*.json"), reverse=True)
+
+
+def carregar_backup(caminho):
+    """Lê e valida o formato de um backup salvo pelo Dragonic."""
+    with Path(caminho).open("r", encoding="utf-8") as arquivo:
+        backup = json.load(arquivo)
+    if backup.get("formato") != "dragonic-chat-backup-v1" or not isinstance(backup.get("mensagens"), list):
+        raise ValueError("O arquivo não é um backup válido do Dragonic.")
+    return backup

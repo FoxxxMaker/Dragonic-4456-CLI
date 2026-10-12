@@ -1,6 +1,7 @@
 {
     "system_prompt": "System: Você é uma assistente útil, educada e inteligente. Responda em português de forma natural. Não repita frases desnecessariamente. Não gere símbolos aleatórios. Seja clara e amigável.",
     "max_tokens": 80,
+    "n_ctx": 2048,
     "historico_max_mensagens": 10,
     "backup_chats_habilitado": true,
     "diretorio_backup_chats": "backups_chats",

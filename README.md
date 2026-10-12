@@ -47,6 +47,7 @@ O arquivo [Config.json](Config.json) reúne:
 
 - `system_prompt`: instruções iniciais do modelo.
 - `max_tokens`: máximo de tokens por resposta.
+- `n_ctx`: tamanho do contexto enviado ao modelo ao carregá-lo.
 - `temperature`: variação de resposta.
 - `stop`: sequências de parada.
 - `echo`: se inclui o prompt na saída.
@@ -55,6 +56,8 @@ O arquivo [Config.json](Config.json) reúne:
 - `diretorio_backup_chats`: pasta local que recebe os arquivos JSON de backup.
 
 Os backups preservam a conversa completa, mesmo quando o limite do histórico de contexto reduz as mensagens enviadas ao modelo. Por privacidade, a pasta `backups_chats/` não é enviada ao Git.
+
+No console BIOS, a opção `2` permite alterar e salvar essas configurações; a opção `3` mostra os chats salvos e permite retomá-los com um modelo selecionado. O benchmark é curto, usa uma pergunta fixa e informa duração e tokens por segundo.
 
 ## Documentação
 
