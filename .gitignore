@@ -14,3 +14,4 @@ build/
 *.bin
 # Backups locais podem conter conversas privadas.
 backups_chats/
+MCP_Servers/servidores.json

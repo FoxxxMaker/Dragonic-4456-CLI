@@ -8,6 +8,7 @@ import Backup_Chat
 import Benchmark
 import Chat
 import Interface_CLI
+import MCP_Integracoes
 import MCP_Local
 
 
@@ -127,6 +128,23 @@ class BenchmarkTests(unittest.TestCase):
 
 
 class McpLocalTests(unittest.TestCase):
+    def test_cadastro_de_integracao_mcp_stdio(self):
+        diretorio_original = MCP_Integracoes.DIRETORIO_SERVIDORES
+        arquivo_original = MCP_Integracoes.ARQUIVO_CONFIGURACAO
+        with tempfile.TemporaryDirectory() as diretorio_temporario:
+            MCP_Integracoes.DIRETORIO_SERVIDORES = Path(diretorio_temporario)
+            MCP_Integracoes.ARQUIVO_CONFIGURACAO = Path(diretorio_temporario) / "servidores.json"
+            try:
+                MCP_Integracoes.adicionar_servidor("teste", "python", ["servidor.py"])
+                servidores = MCP_Integracoes.listar_servidores()
+                MCP_Integracoes.remover_servidor("teste")
+            finally:
+                MCP_Integracoes.DIRETORIO_SERVIDORES = diretorio_original
+                MCP_Integracoes.ARQUIVO_CONFIGURACAO = arquivo_original
+
+        self.assertEqual(servidores[0]["nome"], "teste")
+        self.assertEqual(servidores[0]["argumentos"], ["servidor.py"])
+
     def test_calculadora_mcp_aceita_operacoes_basicas(self):
         resultado = MCP_Local.chamar_ferramenta("calcular", {"expressao": "2 * (3 + 4)"})
 
@@ -173,7 +191,8 @@ class InterfaceCliTests(unittest.TestCase):
         self.assertIn("DRAGONIC 4456 // CONSOLE DE CONTROLE", tela)
         self.assertIn("[1] Inicializar chat local", tela)
         self.assertIn("[3] Visualizar ou continuar chats salvos", tela)
-        self.assertIn("[4] Desligar Dragonic", tela)
+        self.assertIn("[4] MCP local e integrações", tela)
+        self.assertIn("[5] Desligar Dragonic", tela)
 
 
 if __name__ == "__main__":

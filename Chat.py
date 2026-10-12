@@ -64,7 +64,9 @@ def chat(modelo, entrada=input, saida=print, historico_inicial=None, system_prom
     limite_mensagens = config.get("historico_max_mensagens", 10)
     historico_contexto = historico_backup[-limite_mensagens:] if limite_mensagens > 0 else []
     system_prompt = system_prompt or config["system_prompt"]
-    prompt_com_mcp = system_prompt + MCP.instrucao_para_modelo()
+    prompt_com_mcp = system_prompt
+    if config.get("mcp_local_habilitado", True):
+        prompt_com_mcp += MCP.instrucao_para_modelo()
 
     if nome_modelo:
         saida(nome_modelo)
@@ -77,7 +79,10 @@ def chat(modelo, entrada=input, saida=print, historico_inicial=None, system_prom
                 saida("Encerrando o chat. Até mais!")
                 break
             if pergunta.strip() == "/mcp":
-                saida("Ferramentas MCP: " + ", ".join(item["name"] for item in MCP.listar_ferramentas()))
+                if config.get("mcp_local_habilitado", True):
+                    saida("Ferramentas MCP: " + ", ".join(item["name"] for item in MCP.listar_ferramentas()))
+                else:
+                    saida("O MCP local está desativado nas configurações.")
                 continue
 
             prompt = HISTORICO.montar_prompt(prompt_com_mcp, historico_contexto, pergunta)
