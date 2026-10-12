@@ -74,28 +74,28 @@ def configurar_sistema():
         if escolha == "0":
             return
         if escolha == "1":
-            _editar_numero("temperature", float, 0.0, "temperatura")
-        elif escolha == "2":
-            _editar_numero("max_tokens", int, 1, "máximo de tokens")
-        elif escolha == "3":
-            _editar_numero("n_ctx", int, 128, "contexto do modelo")
-        elif escolha == "4":
-            _editar_numero("historico_max_mensagens", int, 0, "histórico no prompt")
-        elif escolha == "5":
-            valor = input("Stops separados por | (vazio remove todos): ")
-            _salvar_alteracao("stop", [item.strip() for item in valor.split("|") if item.strip()])
-        elif escolha == "6":
-            _salvar_alteracao("echo", not CH.config["echo"])
-        elif escolha == "7":
-            _salvar_alteracao("backup_chats_habilitado", not CH.config.get("backup_chats_habilitado", True))
-        elif escolha == "8":
-            valor = input("Pasta de backup: ").strip()
-            if valor:
-                _salvar_alteracao("diretorio_backup_chats", valor)
-        elif escolha == "9":
             valor = input("Novo system prompt: ").strip()
             if valor:
                 _salvar_alteracao("system_prompt", valor)
+        elif escolha == "2":
+            _editar_numero("temperature", float, 0.0, "temperatura")
+        elif escolha == "3":
+            _editar_numero("max_tokens", int, 1, "máximo de tokens")
+        elif escolha == "4":
+            _editar_numero("n_ctx", int, 128, "contexto do modelo")
+        elif escolha == "5":
+            _editar_numero("historico_max_mensagens", int, 0, "histórico no prompt")
+        elif escolha == "6":
+            valor = input("Stops separados por | (vazio remove todos): ")
+            _salvar_alteracao("stop", [item.strip() for item in valor.split("|") if item.strip()])
+        elif escolha == "7":
+            _salvar_alteracao("echo", not CH.config["echo"])
+        elif escolha == "8":
+            _salvar_alteracao("backup_chats_habilitado", not CH.config.get("backup_chats_habilitado", True))
+        elif escolha == "9":
+            valor = input("Pasta de backup: ").strip()
+            if valor:
+                _salvar_alteracao("diretorio_backup_chats", valor)
         elif escolha == "b":
             modelo = obter_modelo()
             if modelo is not None:

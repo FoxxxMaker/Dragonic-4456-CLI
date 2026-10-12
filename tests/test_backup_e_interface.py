@@ -96,11 +96,12 @@ class BackupChatTests(unittest.TestCase):
             prompts.append(argumentos["prompt"])
             return {"choices": [{"text": "continuação"}]}
 
+        saidas = []
         try:
             Chat.chat(
                 modelo,
                 entrada=lambda _: next(entradas),
-                saida=lambda _: None,
+                saida=saidas.append,
                 historico_inicial=[{"papel": "usuario", "conteudo": "mensagem antiga"}],
                 system_prompt="prompt antigo",
             )
@@ -109,6 +110,8 @@ class BackupChatTests(unittest.TestCase):
 
         self.assertIn("prompt antigo", prompts[0])
         self.assertIn("mensagem antiga", prompts[0])
+        self.assertIn("CHAT RETOMADO", "\n".join(saidas))
+        self.assertIn("Você: mensagem antiga", "\n".join(saidas))
 
 
 class BenchmarkTests(unittest.TestCase):

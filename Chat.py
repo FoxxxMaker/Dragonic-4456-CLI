@@ -20,12 +20,24 @@ def salvar_configuracao():
     caminho_temporario.replace(CAMINHO_CONFIGURACAO)
 
 
+def exibir_historico(historico, saida=print):
+    """Redesenha as mensagens de uma conversa retomada no terminal."""
+    if not historico:
+        return
+    saida("\n=== CHAT RETOMADO: MENSAGENS ANTERIORES ===")
+    for mensagem in historico:
+        papel = "Você" if mensagem.get("papel") == "usuario" else "Model"
+        saida(f"{papel}: {mensagem.get('conteudo', '')}")
+    saida("=== FIM DO HISTÓRICO ===\n")
+
+
 def chat(modelo, entrada=input, saida=print, historico_inicial=None, system_prompt=None):
     """Executa um chat novo ou retomado e salva sua sessão ao encerrar."""
     historico_backup = list(historico_inicial or [])
     limite_mensagens = config.get("historico_max_mensagens", 10)
     historico_contexto = historico_backup[-limite_mensagens:] if limite_mensagens > 0 else []
     system_prompt = system_prompt or config["system_prompt"]
+    exibir_historico(historico_backup, saida)
 
     try:
         while True:
