@@ -28,7 +28,7 @@ Depois, coloque um modelo `.gguf` em `Models/` e execute:
 .\.venv\Scripts\python.exe Main.py
 ```
 
-O modo padrão utiliza CPU. A aceleração GPU requer wheels específicos e **não é configurada por este instalador**. Consulte [Instalação](docs/Instalação.md) para diagnóstico de erros.
+O modo padrão utiliza CPU. Para instalar o wheel oficial com **Vulkan** e usar a GPU, execute `powershell -ExecutionPolicy Bypass -File .\install_windows.ps1 -Backend Vulkan`. Depois, no console, abra `2` e ajuste `Camadas na GPU Vulkan` para `-1` (todas) ou para a quantidade que couber na VRAM. Consulte [Instalação](docs/Instalação.md) para diagnóstico de erros.
 
 ## Linux / instalação manual
 
@@ -54,6 +54,7 @@ O arquivo [Config.json](Config.json) reúne:
 - `historico_max_mensagens`: quantidade máxima de mensagens em memória.
 - `backup_chats_habilitado`: ativa ou desativa o backup ao encerrar um chat.
 - `diretorio_backup_chats`: pasta local que recebe os arquivos JSON de backup.
+- `n_gpu_layers`: camadas transferidas para a GPU (`0` mantém CPU; `-1` tenta transferir todas via Vulkan).
 
 Os backups preservam a conversa completa, mesmo quando o limite do histórico de contexto reduz as mensagens enviadas ao modelo. Por privacidade, a pasta `backups_chats/` não é enviada ao Git.
 

@@ -47,7 +47,17 @@ def obter_modelo():
     path = carregar_modelo()
     if path is None or not CHK.checar_tamanho(path):
         return None
-    return CM.carregar_modelo(path, CH.config.get("n_ctx", 2048)), path.name
+    try:
+        modelo = CM.carregar_modelo(
+            path,
+            CH.config.get("n_ctx", 2048),
+            CH.config.get("n_gpu_layers", 0),
+        )
+    except RuntimeError as erro:
+        INTERFACE.mostrar_mensagem(str(erro))
+        input("Pressione ENTER para voltar: ")
+        return None
+    return modelo, path.name
 
 
 def _salvar_alteracao(chave, valor):
@@ -97,6 +107,22 @@ def configurar_sistema():
             valor = input("Pasta de backup: ").strip()
             if valor:
                 _salvar_alteracao("diretorio_backup_chats", valor)
+        elif escolha == "10":
+            try:
+                camadas = int(input("Camadas na GPU (-1 para todas, 0 para CPU): ").strip())
+                if camadas < -1:
+                    raise ValueError
+            except ValueError:
+                INTERFACE.mostrar_mensagem("Use -1, 0 ou um número inteiro positivo.")
+                input("Pressione ENTER para continuar: ")
+                continue
+            _salvar_alteracao("n_gpu_layers", camadas)
+            if camadas and not CM.gpu_disponivel():
+                INTERFACE.mostrar_mensagem(
+                    "Configuração salva, mas o wheel atual ainda é CPU. "
+                    "Execute install_windows.ps1 -Backend Vulkan."
+                )
+                input("Pressione ENTER para continuar: ")
         elif escolha == "b":
             carregado = obter_modelo()
             if carregado is not None:
