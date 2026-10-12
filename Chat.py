@@ -3,6 +3,7 @@ from pathlib import Path
 
 import Backup_Chat as BACKUP
 import Chat_Historico as HISTORICO
+import MCP_Local as MCP
 
 
 CAMINHO_CONFIGURACAO = Path(__file__).resolve().parent / "Config.json"
@@ -12,7 +13,6 @@ with CAMINHO_CONFIGURACAO.open("r", encoding="utf-8") as arquivo:
 
 
 def salvar_configuracao():
-    """Persiste as configurações atuais sem depender da pasta do terminal."""
     caminho_temporario = CAMINHO_CONFIGURACAO.with_suffix(".tmp")
     with caminho_temporario.open("w", encoding="utf-8") as arquivo:
         json.dump(config, arquivo, ensure_ascii=False, indent=2)
@@ -21,7 +21,6 @@ def salvar_configuracao():
 
 
 def exibir_historico(historico, saida=print):
-    """Redesenha as mensagens de uma conversa retomada no terminal."""
     if not historico:
         return
     saida("\n=== CHAT RETOMADO: MENSAGENS ANTERIORES ===")
@@ -31,12 +30,44 @@ def exibir_historico(historico, saida=print):
     saida("=== FIM DO HISTÓRICO ===\n")
 
 
-def chat(modelo, entrada=input, saida=print, historico_inicial=None, system_prompt=None):
+def _gerar(modelo, prompt):
+    resposta = modelo(
+        prompt=prompt,
+        max_tokens=config["max_tokens"],
+        temperature=config["temperature"],
+        stop=config["stop"],
+        echo=config["echo"],
+    )
+    return resposta["choices"][0]["text"].strip()
+
+
+def gerar_resposta(modelo, prompt):
+    """Gera a resposta e executa no máximo uma ferramenta MCP por turno."""
+    texto = _gerar(modelo, prompt)
+    chamada = MCP.extrair_chamada(texto)
+    if chamada is None:
+        return texto
+
+    nome, argumentos = chamada
+    resultado = MCP.chamar_ferramenta(nome, argumentos)
+    texto_resultado = resultado["content"][0]["text"]
+    prompt_com_resultado = (
+        f"{prompt}\n\nResultado da ferramenta MCP {nome}: {texto_resultado}"
+        "\n\nAgora responda ao usuário usando esse resultado.\nAssistente:"
+    )
+    return _gerar(modelo, prompt_com_resultado)
+
+
+def chat(modelo, entrada=input, saida=print, historico_inicial=None, system_prompt=None, nome_modelo=None):
     """Executa um chat novo ou retomado e salva sua sessão ao encerrar."""
     historico_backup = list(historico_inicial or [])
     limite_mensagens = config.get("historico_max_mensagens", 10)
     historico_contexto = historico_backup[-limite_mensagens:] if limite_mensagens > 0 else []
     system_prompt = system_prompt or config["system_prompt"]
+    prompt_com_mcp = system_prompt + MCP.instrucao_para_modelo()
+
+    if nome_modelo:
+        saida(nome_modelo)
     exibir_historico(historico_backup, saida)
 
     try:
@@ -45,24 +76,15 @@ def chat(modelo, entrada=input, saida=print, historico_inicial=None, system_prom
             if pergunta.lower() in ["sair", "exit", "quit"]:
                 saida("Encerrando o chat. Até mais!")
                 break
+            if pergunta.strip() == "/mcp":
+                saida("Ferramentas MCP: " + ", ".join(item["name"] for item in MCP.listar_ferramentas()))
+                continue
 
-            prompt = HISTORICO.montar_prompt(system_prompt, historico_contexto, pergunta)
-            resposta = modelo(
-                prompt=prompt,
-                max_tokens=config["max_tokens"],
-                temperature=config["temperature"],
-                stop=config["stop"],
-                echo=config["echo"],
-            )
-            texto_resposta = resposta["choices"][0]["text"].strip()
-
-            for historico, limite in (
-                (historico_contexto, limite_mensagens),
-                (historico_backup, None),
-            ):
+            prompt = HISTORICO.montar_prompt(prompt_com_mcp, historico_contexto, pergunta)
+            texto_resposta = gerar_resposta(modelo, prompt)
+            for historico, limite in ((historico_contexto, limite_mensagens), (historico_backup, None)):
                 HISTORICO.adicionar_mensagem(historico, "usuario", pergunta, limite)
                 HISTORICO.adicionar_mensagem(historico, "assistente", texto_resposta, limite)
-
             saida(f"Model: {texto_resposta}")
     except (EOFError, KeyboardInterrupt):
         saida("Chat interrompido. Salvando a conversa atual...")

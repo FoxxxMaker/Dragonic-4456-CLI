@@ -59,6 +59,10 @@ Os backups preservam a conversa completa, mesmo quando o limite do histórico de
 
 No console BIOS, a opção `2` permite alterar e salvar essas configurações; a opção `3` mostra os chats salvos e permite retomá-los com um modelo selecionado. O benchmark é curto, usa uma pergunta fixa e informa duração e tokens por segundo.
 
+## MCP local inicial
+
+O chat inclui uma base MCP local, com as ferramentas `hora_atual` e `calcular`. O modelo pode solicitá-las no formato `<mcp>{"name":"calcular","arguments":{"expressao":"2+2"}}</mcp>`; o Dragonic executa a ferramenta e pede a resposta final ao modelo. Digite `/mcp` durante o chat para listar as ferramentas disponíveis.
+
 ## Documentação
 
 - [Instalação](docs/Instalação.md)
