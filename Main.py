@@ -10,6 +10,7 @@ import Carregar_Modelo as CM
 import Chat as CH
 import Checar_Tamanho as CHK
 import Interface_CLI as INTERFACE
+import MCP_Integracoes as MCP_INTEGRACOES
 
 
 DIRETORIO_MODELOS = Path(__file__).resolve().parent / "Models"
@@ -145,6 +146,45 @@ def gerenciar_chats():
             )
 
 
+def gerenciar_mcp():
+    while True:
+        servidores = MCP_INTEGRACOES.listar_servidores()
+        INTERFACE.limpar_tela()
+        INTERFACE.mostrar_mcp(
+            CH.config.get("mcp_local_habilitado", True),
+            servidores,
+            MCP_INTEGRACOES.DIRETORIO_SERVIDORES,
+        )
+        escolha = input("Selecione uma opção MCP: ").strip()
+        if escolha == "0":
+            return
+        if escolha == "1":
+            _salvar_alteracao("mcp_local_habilitado", not CH.config.get("mcp_local_habilitado", True))
+        elif escolha == "2":
+            input("Pressione ENTER para voltar: ")
+        elif escolha == "3":
+            nome = input("Nome da integração: ")
+            comando = input("Comando (ex.: npx): ")
+            argumentos = [item.strip() for item in input("Argumentos separados por |: ").split("|") if item.strip()]
+            try:
+                MCP_INTEGRACOES.adicionar_servidor(nome, comando, argumentos)
+            except ValueError as erro:
+                INTERFACE.mostrar_mensagem(str(erro))
+                input("Pressione ENTER para continuar: ")
+        elif escolha == "4":
+            try:
+                MCP_INTEGRACOES.remover_servidor(input("Nome da integração para remover: "))
+            except ValueError as erro:
+                INTERFACE.mostrar_mensagem(str(erro))
+                input("Pressione ENTER para continuar: ")
+        elif escolha == "5":
+            INTERFACE.mostrar_mensagem(f"Pasta MCP: {MCP_INTEGRACOES.DIRETORIO_SERVIDORES}")
+            input("Pressione ENTER para voltar: ")
+        else:
+            INTERFACE.mostrar_mensagem("Opção MCP inválida.")
+            input("Pressione ENTER para continuar: ")
+
+
 def exibir_abertura():
     init()
     INTERFACE.limpar_tela()
@@ -179,10 +219,12 @@ def main():
         elif escolha == "3":
             gerenciar_chats()
         elif escolha == "4":
+            gerenciar_mcp()
+        elif escolha == "5":
             INTERFACE.mostrar_mensagem("Dragonic desligado. Até a próxima!")
             return
         else:
-            INTERFACE.mostrar_mensagem("Opção inválida. Escolha 1, 2, 3 ou 4.")
+            INTERFACE.mostrar_mensagem("Opção inválida. Escolha 1, 2, 3, 4 ou 5.")
             input("Pressione ENTER para tentar novamente: ")
 
 

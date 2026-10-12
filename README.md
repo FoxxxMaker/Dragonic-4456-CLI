@@ -63,6 +63,8 @@ No console BIOS, a opção `2` permite alterar e salvar essas configurações; a
 
 O chat inclui uma base MCP local, com as ferramentas `hora_atual` e `calcular`. O modelo pode solicitá-las no formato `<mcp>{"name":"calcular","arguments":{"expressao":"2+2"}}</mcp>`; o Dragonic executa a ferramenta e pede a resposta final ao modelo. Digite `/mcp` durante o chat para listar as ferramentas disponíveis.
 
+A opção `4` do console abre a tela de MCP: nela é possível ativar/desativar o MCP local e cadastrar servidores externos por `stdio`. Os cadastros ficam em `MCP_Servers/servidores.json`; a pasta traz um README com um exemplo de comando `npx`.
+
 ## Documentação
 
 - [Instalação](docs/Instalação.md)

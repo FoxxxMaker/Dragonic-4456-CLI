@@ -40,7 +40,8 @@ def mostrar_menu_principal(entrada=input, saida=print, limpar=limpar_tela):
             "[1] Inicializar chat local",
             "[2] Configurações do sistema",
             "[3] Visualizar ou continuar chats salvos",
-            "[4] Desligar Dragonic",
+            "[4] MCP local e integrações",
+            "[5] Desligar Dragonic",
         ],
         saida,
     )
@@ -77,6 +78,25 @@ def mostrar_conversa(mensagens, saida=print):
         texto = mensagem.get("conteudo", "").replace("\n", " ")
         linhas.append(f"{papel}: {texto}")
     painel("visualização de chat (últimas 12 mensagens)", linhas or ["Conversa vazia."], saida)
+
+
+def mostrar_mcp(local_habilitado, servidores, pasta, saida=print):
+    linhas = [
+        f"MCP local: {'ATIVADO' if local_habilitado else 'DESATIVADO'}",
+        f"Pasta de integrações: {pasta}",
+        "",
+        "[1] Ativar/desativar MCP local",
+        "[2] Listar integrações externas",
+        "[3] Adicionar servidor MCP stdio",
+        "[4] Remover integração",
+        "[5] Mostrar caminho da pasta",
+        "[0] Voltar",
+    ]
+    linhas.extend(
+        f"- {servidor['nome']} ({'ativo' if servidor.get('habilitado', True) else 'inativo'})"
+        for servidor in servidores
+    )
+    painel("mcp e integrações", linhas, saida)
 
 
 def mostrar_mensagem(mensagem, saida=print):
