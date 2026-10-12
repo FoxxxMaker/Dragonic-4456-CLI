@@ -1,7 +1,13 @@
 import json
+from pathlib import Path
+
 import Chat_Historico as HISTORICO
-    
-with open("Config.json", "r") as f:
+
+
+CAMINHO_CONFIGURACAO = Path(__file__).resolve().parent / "Config.json"
+
+
+with CAMINHO_CONFIGURACAO.open("r", encoding="utf-8") as f:
     config = json.load(f)
 
 def chat(modelo):
