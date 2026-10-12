@@ -6,8 +6,8 @@ Dragonic 4456 é um protótipo de chat local em Python. Ele carrega modelos `.gg
 
 ## Funcionalidades
 
-- Interface de linha de comando e listagem de modelos GGUF.
-- Chat local com histórico em memória.
+- Interface de terminal inspirada em BIOS, com menu de inicialização e status.
+- Chat local com histórico em memória e backup automático da sessão em JSON.
 - Configuração em `Config.json`.
 
 ## Instalação no Windows (recomendada)
@@ -51,6 +51,10 @@ O arquivo [Config.json](Config.json) reúne:
 - `stop`: sequências de parada.
 - `echo`: se inclui o prompt na saída.
 - `historico_max_mensagens`: quantidade máxima de mensagens em memória.
+- `backup_chats_habilitado`: ativa ou desativa o backup ao encerrar um chat.
+- `diretorio_backup_chats`: pasta local que recebe os arquivos JSON de backup.
+
+Os backups preservam a conversa completa, mesmo quando o limite do histórico de contexto reduz as mensagens enviadas ao modelo. Por privacidade, a pasta `backups_chats/` não é enviada ao Git.
 
 ## Documentação
 
