@@ -8,6 +8,7 @@ import Backup_Chat
 import Benchmark
 import Chat
 import Interface_CLI
+import MCP_Local
 
 
 class BackupChatTests(unittest.TestCase):
@@ -123,6 +124,39 @@ class BenchmarkTests(unittest.TestCase):
 
         self.assertEqual(resultado["tokens"], 3)
         self.assertGreaterEqual(resultado["duracao_segundos"], 0)
+
+
+class McpLocalTests(unittest.TestCase):
+    def test_calculadora_mcp_aceita_operacoes_basicas(self):
+        resultado = MCP_Local.chamar_ferramenta("calcular", {"expressao": "2 * (3 + 4)"})
+
+        self.assertFalse(resultado["isError"])
+        self.assertEqual(resultado["content"][0]["text"], "Resultado: 14")
+
+    def test_chat_mostra_nome_gguf_e_usa_resultado_mcp(self):
+        configuracao_original = Chat.config
+        Chat.config = {**configuracao_original, "backup_chats_habilitado": False}
+        respostas = iter([
+            '<mcp>{"name":"calcular","arguments":{"expressao":"2+2"}}</mcp>',
+            "O resultado é 4.",
+        ])
+        saidas = []
+
+        def modelo(**_):
+            return {"choices": [{"text": next(respostas)}]}
+
+        try:
+            Chat.chat(
+                modelo,
+                entrada=lambda _: "sair" if len(saidas) > 1 else "quanto é 2+2?",
+                saida=saidas.append,
+                nome_modelo="modelo-teste.gguf",
+            )
+        finally:
+            Chat.config = configuracao_original
+
+        self.assertEqual(saidas[0], "modelo-teste.gguf")
+        self.assertIn("Model: O resultado é 4.", saidas)
 
 
 class InterfaceCliTests(unittest.TestCase):

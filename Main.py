@@ -46,7 +46,7 @@ def obter_modelo():
     path = carregar_modelo()
     if path is None or not CHK.checar_tamanho(path):
         return None
-    return CM.carregar_modelo(path, CH.config.get("n_ctx", 2048))
+    return CM.carregar_modelo(path, CH.config.get("n_ctx", 2048)), path.name
 
 
 def _salvar_alteracao(chave, valor):
@@ -97,8 +97,9 @@ def configurar_sistema():
             if valor:
                 _salvar_alteracao("diretorio_backup_chats", valor)
         elif escolha == "b":
-            modelo = obter_modelo()
-            if modelo is not None:
+            carregado = obter_modelo()
+            if carregado is not None:
+                modelo, _ = carregado
                 resultado = Benchmark.executar(modelo, CH.config)
                 INTERFACE.mostrar_mensagem(
                     f"{resultado['tokens']} tokens em {resultado['duracao_segundos']:.2f}s "
@@ -133,9 +134,15 @@ def gerenciar_chats():
     INTERFACE.limpar_tela()
     INTERFACE.mostrar_conversa(backup["mensagens"])
     if input("[1] Continuar este chat  [0] Voltar: ").strip() == "1":
-        modelo = obter_modelo()
-        if modelo is not None:
-            CH.chat(modelo, historico_inicial=backup["mensagens"], system_prompt=backup.get("system_prompt"))
+        carregado = obter_modelo()
+        if carregado is not None:
+            modelo, nome_modelo = carregado
+            CH.chat(
+                modelo,
+                historico_inicial=backup["mensagens"],
+                system_prompt=backup.get("system_prompt"),
+                nome_modelo=nome_modelo,
+            )
 
 
 def exibir_abertura():
@@ -163,9 +170,10 @@ def main():
     while True:
         escolha = INTERFACE.mostrar_menu_principal()
         if escolha == "1":
-            modelo = obter_modelo()
-            if modelo is not None:
-                CH.chat(modelo)
+            carregado = obter_modelo()
+            if carregado is not None:
+                modelo, nome_modelo = carregado
+                CH.chat(modelo, nome_modelo=nome_modelo)
         elif escolha == "2":
             configurar_sistema()
         elif escolha == "3":
