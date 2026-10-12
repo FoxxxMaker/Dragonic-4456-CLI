@@ -5,7 +5,10 @@ Evita que o pip tente compilar llama-cpp-python com CMake/MSVC.
 Uso: powershell -ExecutionPolicy Bypass -File .\install_windows.ps1
 #>
 [CmdletBinding()]
-param()
+param(
+    [ValidateSet('CPU', 'Vulkan')]
+    [string]$Backend = 'CPU'
+)
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -13,7 +16,12 @@ $ErrorActionPreference = 'Stop'
 $venvDir = Join-Path $PSScriptRoot '.venv'
 $venvPython = Join-Path $venvDir 'Scripts\python.exe'
 $requirements = Join-Path $PSScriptRoot 'requirements.txt'
-$cpuWheelIndex = 'https://abetlen.github.io/llama-cpp-python/whl/cpu'
+$wheelIndex = if ($Backend -eq 'Vulkan') {
+    'https://abetlen.github.io/llama-cpp-python/whl/vulkan'
+}
+else {
+    'https://abetlen.github.io/llama-cpp-python/whl/cpu'
+}
 $checkPython = "import sys, struct; print('Python:', sys.version.split()[0], 'arquitetura:', struct.calcsize('P') * 8, 'bits'); sys.exit(0 if (3, 10) <= sys.version_info[:2] <= (3, 13) and struct.calcsize('P') == 8 else 1)"
 
 if ($env:OS -ne 'Windows_NT') {
@@ -56,10 +64,10 @@ if ($LASTEXITCODE -ne 0) {
     throw 'Falha ao atualizar pip. Verifique a conexao com a internet.'
 }
 
-Write-Host 'Instalando wheels de CPU (sem compilar C/C++) ...'
-& $venvPython -m pip install --only-binary=:all: --extra-index-url $cpuWheelIndex -r $requirements
+Write-Host "Instalando wheels $Backend (sem compilar C/C++) ..."
+& $venvPython -m pip install --only-binary=:all: --force-reinstall --extra-index-url $wheelIndex -r $requirements
 if ($LASTEXITCODE -ne 0) {
-    throw 'Nenhum wheel compativel ou download falhou. Verifique Python x64, rede e acesso ao indice oficial. O script nao compila C++.'
+    throw "Nenhum wheel $Backend compativel ou download falhou. Verifique Python x64, rede e acesso ao indice oficial. O script nao compila C++."
 }
 
 Write-Host 'Verificando dependencias e carregamento da biblioteca nativa ...'
@@ -68,7 +76,7 @@ if ($LASTEXITCODE -ne 0) {
     throw 'Dependencias inconsistentes no ambiente virtual.'
 }
 
-& $venvPython -c "from llama_cpp import Llama; import colorama; print('OK: llama_cpp e colorama importados')"
+& $venvPython -c "from llama_cpp import Llama, llama_supports_gpu_offload; import colorama; print('OK: llama_cpp e colorama importados'); print('GPU offload:', llama_supports_gpu_offload())"
 if ($LASTEXITCODE -ne 0) {
     throw 'A importacao falhou. Verifique DLLs/Visual C++ Redistributable do Windows; nenhuma compilacao foi realizada.'
 }

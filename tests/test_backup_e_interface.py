@@ -194,6 +194,20 @@ class InterfaceCliTests(unittest.TestCase):
         self.assertIn("[4] MCP local e integrações", tela)
         self.assertIn("[5] Desligar Dragonic", tela)
 
+    def test_configuracao_exibe_controle_de_camadas_gpu(self):
+        saidas = []
+
+        Interface_CLI.mostrar_configuracao({
+            "system_prompt": "teste",
+            "temperature": 0.7,
+            "max_tokens": 10,
+            "stop": [],
+            "echo": False,
+            "n_gpu_layers": -1,
+        }, saida=saidas.append)
+
+        self.assertIn("[10] Camadas na GPU Vulkan: -1", "\n".join(saidas))
+
 
 if __name__ == "__main__":
     unittest.main()

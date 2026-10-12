@@ -61,6 +61,8 @@ def mostrar_configuracao(configuracao, saida=print):
             f"[7] Echo: {'ATIVADO' if configuracao['echo'] else 'DESATIVADO'}",
             f"[8] Backup: {'ATIVADO' if configuracao.get('backup_chats_habilitado', True) else 'DESATIVADO'}",
             f"[9] Pasta de backup: {configuracao.get('diretorio_backup_chats', 'backups_chats')}",
+            f"[10] Camadas na GPU Vulkan: {configuracao.get('n_gpu_layers', 0)} "
+            "(0 = CPU, -1 = todas)",
             "[B] Rodar benchmark de modelo     [0] Voltar",
         ],
         saida,

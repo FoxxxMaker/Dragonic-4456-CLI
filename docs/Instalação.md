@@ -19,13 +19,23 @@
 
 O script usa `pip --only-binary=:all:` e o [índice de wheels de CPU do llama-cpp-python](https://abetlen.github.io/llama-cpp-python/whl/cpu). Se não houver wheel para seu Python/Windows, a instalação **falha de forma explícita**, sem tentar baixar o código e compilar com CMake/MSVC.
 
+### GPU via Vulkan
+
+Se o `vulkaninfo --summary` listar sua placa, instale o wheel Vulkan oficial sem compilar C++:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install_windows.ps1 -Backend Vulkan
+```
+
+Em seguida, execute o Dragonic, abra `2. Configurações do sistema`, selecione `10` e informe `-1` para tentar transferir todas as camadas do modelo para a GPU. Use `0` para voltar imediatamente ao modo CPU ou um valor positivo quando a VRAM não suportar o modelo inteiro. O programa impede a inicialização com GPU caso o wheel instalado ainda seja somente CPU.
+
 ### Solução de problemas
 
 - **`No matching distribution found for llama-cpp-python`**: confira `python --version`, arquitetura de 64 bits e conexão com o índice. Instale Python 3.12 x64, exclua somente a pasta `.venv` e execute o instalador novamente.
 - **`DLL load failed`, `ImportError` ou erro de runtime**: instale ou repare o [Microsoft Visual C++ Redistributable x64](https://aka.ms/vs/17/release/vc_redist.x64.exe) e execute o instalador novamente. Isso não equivale a instalar o compilador C++.
 - **`CMake Error`, `nmake`, `cl.exe`**: normalmente indicam tentativa de instalação manual a partir do código-fonte. Use o script PowerShell e não apenas `pip install -r requirements.txt`.
 - **Ambiente virtual incompatível**: remova `.venv`, nunca `Models/`, e rode o instalador novamente.
-- **GPU AMD, NVIDIA ou Vulkan**: este instalador instala a versão CPU por padrão; aceleração de GPU exige instalação e testes separados.
+- **GPU AMD, NVIDIA ou Vulkan**: use `install_windows.ps1 -Backend Vulkan`, confirme que ele mostra `GPU offload: True` e então escolha as camadas no menu `2` do Dragonic. Se o wheel Vulkan não estiver disponível para sua versão do Python, o script falha sem compilar C++.
 
 ## Linux
 
