@@ -6,8 +6,10 @@ Uso: powershell -ExecutionPolicy Bypass -File .\install_windows.ps1
 #>
 [CmdletBinding()]
 param(
-    [ValidateSet('CPU', 'Vulkan')]
-    [string]$Backend = 'CPU'
+    [ValidateSet('CPU', 'Vulkan', 'CUDA', 'Auto')]
+    [string]$Backend = 'CPU',
+    [ValidateSet('cu118', 'cu121', 'cu122', 'cu123', 'cu124', 'cu125', 'cu130', 'cu132')]
+    [string]$CudaVersion = 'cu121'
 )
 
 Set-StrictMode -Version Latest
@@ -16,8 +18,32 @@ $ErrorActionPreference = 'Stop'
 $venvDir = Join-Path $PSScriptRoot '.venv'
 $venvPython = Join-Path $venvDir 'Scripts\python.exe'
 $requirements = Join-Path $PSScriptRoot 'requirements.txt'
-$wheelIndex = if ($Backend -eq 'Vulkan') {
+$backendEfetivo = $Backend
+if ($Backend -eq 'Auto') {
+    if (Get-Command 'nvidia-smi' -ErrorAction SilentlyContinue) {
+        $backendEfetivo = 'CUDA'
+    }
+    elseif (Get-Command 'vulkaninfo' -ErrorAction SilentlyContinue) {
+        $backendEfetivo = 'Vulkan'
+    }
+    else {
+        $backendEfetivo = 'CPU'
+    }
+    Write-Host "Backend detectado automaticamente: $backendEfetivo"
+}
+
+if ($backendEfetivo -eq 'CUDA') {
+    & $venvPython -c "import sys; sys.exit(0 if (3, 10) <= sys.version_info[:2] <= (3, 12) else 1)"
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Os wheels CUDA aceitam Python 3.10, 3.11 ou 3.12. Use um desses interpretadores.'
+    }
+}
+
+$wheelIndex = if ($backendEfetivo -eq 'Vulkan') {
     'https://abetlen.github.io/llama-cpp-python/whl/vulkan'
+}
+elseif ($backendEfetivo -eq 'CUDA') {
+    "https://abetlen.github.io/llama-cpp-python/whl/$CudaVersion"
 }
 else {
     'https://abetlen.github.io/llama-cpp-python/whl/cpu'
@@ -64,10 +90,10 @@ if ($LASTEXITCODE -ne 0) {
     throw 'Falha ao atualizar pip. Verifique a conexao com a internet.'
 }
 
-Write-Host "Instalando wheels $Backend (sem compilar C/C++) ..."
+Write-Host "Instalando wheels $backendEfetivo (sem compilar C/C++) ..."
 & $venvPython -m pip install --only-binary=:all: --force-reinstall --extra-index-url $wheelIndex -r $requirements
 if ($LASTEXITCODE -ne 0) {
-    throw "Nenhum wheel $Backend compativel ou download falhou. Verifique Python x64, rede e acesso ao indice oficial. O script nao compila C++."
+    throw "Nenhum wheel $backendEfetivo compativel ou download falhou. Verifique Python x64, rede e acesso ao indice oficial. O script nao compila C++."
 }
 
 Write-Host 'Verificando dependencias e carregamento da biblioteca nativa ...'
