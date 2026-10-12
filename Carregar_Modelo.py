@@ -1,5 +1,22 @@
 import contextlib
 import os
+import subprocess
+
+
+def detectar_nvidia(executar=subprocess.run):
+    """Retorna a GPU NVIDIA detectada pelo driver, ou None quando não houver uma."""
+    try:
+        resultado = executar(
+            ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    if resultado.returncode != 0:
+        return None
+    return resultado.stdout.strip() or None
 
 
 def gpu_disponivel():
@@ -18,8 +35,8 @@ def carregar_modelo(caminho, n_ctx=2048, n_gpu_layers=0):
 
     if n_gpu_layers and not gpu_disponivel():
         raise RuntimeError(
-            "A aceleração Vulkan foi selecionada, mas o llama-cpp-python atual é CPU. "
-            "Execute install_windows.ps1 -Backend Vulkan para instalar o wheel Vulkan."
+            "A aceleração GPU foi selecionada, mas o llama-cpp-python atual é CPU. "
+            "Execute install_windows.ps1 -Backend Vulkan ou -Backend CUDA."
         )
 
     with open(os.devnull, "w") as fnull, contextlib.redirect_stderr(fnull):

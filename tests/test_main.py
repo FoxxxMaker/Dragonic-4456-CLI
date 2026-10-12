@@ -2,6 +2,7 @@ import importlib
 import os
 import tempfile
 import unittest
+from types import SimpleNamespace
 from pathlib import Path
 
 import Chat
@@ -85,6 +86,13 @@ class SelecaoDeModeloTests(unittest.TestCase):
 
         self.assertEqual(resultado, ("modelo", "modelo.gguf"))
         self.assertEqual(argumentos, [(caminho, 4096, -1)])
+
+    def test_detectar_nvidia_retorna_nome_da_placa(self):
+        resultado = Main.CM.detectar_nvidia(
+            lambda *_, **__: SimpleNamespace(returncode=0, stdout="NVIDIA GeForce RTX 4060\n")
+        )
+
+        self.assertEqual(resultado, "NVIDIA GeForce RTX 4060")
 
 
 if __name__ == "__main__":

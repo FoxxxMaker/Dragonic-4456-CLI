@@ -206,7 +206,7 @@ class InterfaceCliTests(unittest.TestCase):
             "n_gpu_layers": -1,
         }, saida=saidas.append)
 
-        self.assertIn("[10] Camadas na GPU Vulkan: -1", "\n".join(saidas))
+        self.assertIn("[10] Camadas na GPU (Vulkan/CUDA): -1", "\n".join(saidas))
 
 
 if __name__ == "__main__":

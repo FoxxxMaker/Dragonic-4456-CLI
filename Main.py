@@ -109,7 +109,7 @@ def configurar_sistema():
                 _salvar_alteracao("diretorio_backup_chats", valor)
         elif escolha == "10":
             try:
-                camadas = int(input("Camadas na GPU (-1 para todas, 0 para CPU): ").strip())
+                camadas = int(input("Camadas na GPU Vulkan/CUDA (-1 para todas, 0 para CPU): ").strip())
                 if camadas < -1:
                     raise ValueError
             except ValueError:
@@ -120,7 +120,7 @@ def configurar_sistema():
             if camadas and not CM.gpu_disponivel():
                 INTERFACE.mostrar_mensagem(
                     "Configuração salva, mas o wheel atual ainda é CPU. "
-                    "Execute install_windows.ps1 -Backend Vulkan."
+                    "Execute install_windows.ps1 -Backend Vulkan ou -Backend CUDA."
                 )
                 input("Pressione ENTER para continuar: ")
         elif escolha == "b":
