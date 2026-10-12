@@ -1,63 +1,56 @@
 # 🐉 Dragonic 4456 Console — V0.3
 
-Dragonic 4456 é um protótipo de chat local em Python. Ele carrega modelos
-`.gguf` da pasta `Models/` e permite conversar com eles pelo terminal usando
-`llama-cpp-python`.
+Dragonic 4456 é um protótipo de chat local em Python. Ele carrega modelos `.gguf` da pasta `Models/` e permite conversar com eles pelo terminal usando `llama-cpp-python`.
 
 > Esta documentação descreve a V0.3. A V0.4 está em desenvolvimento.
 
-## O que a V0.3 oferece
+## Funcionalidades
 
-- Interface de linha de comando com logo e inicialização visual.
-- Listagem de modelos disponíveis em `Models/`.
-- Escolha e verificação do arquivo antes do carregamento.
-- Limite de tamanho para o modelo e animação de carregamento.
-- Chat local pelo terminal.
-- Comandos `sair`, `exit` e `quit` para encerrar o chat.
-- Configuração do comportamento do modelo em `Config.json`.
+- Interface de linha de comando e listagem de modelos GGUF.
+- Chat local com histórico em memória.
+- Configuração em `Config.json`.
 
-## Começando
+## Instalação no Windows (recomendada)
 
-1. Instale as dependências:
+Requisitos: **Windows x64 e Python 3.10–3.13 de 64 bits** (recomendado Python 3.12 x64), com acesso à internet.
 
-   ```powershell
-   pip install -r requirements.txt
-   ```
+No PowerShell, dentro da pasta clonada ou extraída do projeto:
 
-2. Coloque um modelo `.gguf` na pasta `Models/`.
-3. Execute o programa:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install_windows.ps1
+```
 
-   ```powershell
-   python Main.py
-   ```
+O instalador cria `.venv`, instala a dependência nativa usando **wheels pré-compilados de CPU**, bloqueia builds C++ locais e valida o carregamento de `llama_cpp`. Não é necessário instalar Visual Studio Build Tools para compilar o pacote. Alguns computadores podem precisar do **Microsoft Visual C++ Redistributable x64** para executar as DLLs já compiladas.
 
-4. Pressione `ENTER`, digite o nome do modelo listado e comece a conversar.
+Depois, coloque um modelo `.gguf` em `Models/` e execute:
+
+```powershell
+.\.venv\Scripts\python.exe Main.py
+```
+
+O modo padrão utiliza CPU. A aceleração GPU requer wheels específicos e **não é configurada por este instalador**. Consulte [Instalação](docs/Instalação.md) para diagnóstico de erros.
+
+## Linux / instalação manual
+
+Use Python 3.10–3.13 e um ambiente virtual. Em Linux, instalar `llama-cpp-python` pode exigir ferramentas de compilação C/C++ caso não exista wheel adequado.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python Main.py
+```
 
 ## Configuração
 
-O arquivo [Config.json](Config.json) reúne as opções usadas no chat:
+O arquivo [Config.json](Config.json) reúne:
 
-- `system_prompt`: instruções e personalidade inicial do modelo.
-- `max_tokens`: quantidade máxima de tokens gerados por resposta.
-- `temperature`: grau de variação/criatividade da resposta.
-- `stop`: textos que interrompem a geração.
-- `echo`: define se o prompt também aparece na saída.
-
-Veja uma explicação mais detalhada em [Configuração](docs/Configuração.md).
-
-## Estrutura
-
-```text
-Dragonic-4456-CLI/
-├── Main.py
-├── Chat.py
-├── Carregar_Modelo.py
-├── Checar_Tamanho.py
-├── Config.json
-├── requirements.txt
-├── Models/
-└── docs/
-```
+- `system_prompt`: instruções iniciais do modelo.
+- `max_tokens`: máximo de tokens por resposta.
+- `temperature`: variação de resposta.
+- `stop`: sequências de parada.
+- `echo`: se inclui o prompt na saída.
+- `historico_max_mensagens`: quantidade máxima de mensagens em memória.
 
 ## Documentação
 
@@ -67,18 +60,6 @@ Dragonic-4456-CLI/
 - [Configuração](docs/Configuração.md)
 - [Roadmap](docs/roadmap.md)
 
-## Histórico de versões
+## Tecnologias e licença
 
-- [README da V0.1](docs/versoes/README-v0.1.md)
-- [README da V0.2](docs/versoes/README-v0.2.md)
-- [README da V0.3](docs/versoes/README-v0.3.md)
-
-## Tecnologias
-
-- Python
-- [llama-cpp-python](https://github.com/abetlen/llama-cpp-python)
-- Colorama
-
-## Licença
-
-Este projeto é distribuído sob a [licença MIT](LICENSE).
+Python, [llama-cpp-python](https://github.com/abetlen/llama-cpp-python), Colorama. Licença [MIT](LICENSE).
